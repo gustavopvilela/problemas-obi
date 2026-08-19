@@ -3,15 +3,18 @@
 using namespace std;
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int numero, horasTrabalhadas;
     float salarioHora;
 
-    scanf("%d", &numero);
-    scanf("%d", &horasTrabalhadas);
-    scanf("%f", &salarioHora);
+    cin >> numero;
+    cin >> horasTrabalhadas;
+    cin >> salarioHora;
 
-    printf("NUMBER = %d\n", numero);
-    printf("SALARY = U$ %.2f\n", salarioHora * horasTrabalhadas);
+    cout << "NUMBER = " << numero << "\n";
+    cout << fixed << setprecision(2) << "SALARY = U$ " << salarioHora * horasTrabalhadas << "\n";
 
     return 0;
 }

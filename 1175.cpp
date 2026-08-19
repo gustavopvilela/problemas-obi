@@ -3,11 +3,14 @@
 using namespace std;
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int num, esq = 0, dir = 19;
     vector<int> v(20);
 
     for (int i = 0; i < 20; i++) {
-        scanf("%d", &num);
+        cin >> num;
         v[i] = num;
     }
 
@@ -21,7 +24,7 @@ int main() {
     }
 
     for (int i = 0; i < 20; i++) {
-        printf("N[%d] = %d\n", i, v[i]);
+        cout << "N[" << i << "] = " << v[i] << "\n";
     }
 
     return 0;

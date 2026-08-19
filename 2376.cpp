@@ -3,11 +3,14 @@
 using namespace std;
 
 int main () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     queue<char> times{deque<char>{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P'}};
     int placar1, placar2;
 
     for (int i = 0; i < 15; i++) {
-        scanf("%d %d", &placar1, &placar2);
+        cin >> placar1 >> placar2;
         char time1 = times.front();
         times.pop();
         char time2 = times.front();
@@ -21,7 +24,7 @@ int main () {
         }
     }
 
-    printf("%c\n", times.front());
+    cout << times.front() << "\n";
 
     return 0;
 }

@@ -21,15 +21,18 @@ struct Time {
 };
 
 int main () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int n, t, h;
-    char nome[501];
+    string nome;
     priority_queue<pair<string, int>, vector<pair<string, int>>, Operador> pessoas;
     priority_queue<pair<string, int>, vector<pair<string, int>>, Time> times;
     
-    scanf("%d %d", &n, &t);
+    cin >> n >> t;
     
     for (int i = 0; i < n; i++) {
-        scanf(" %s %d", nome, &h);
+        cin >> nome >> h;
         pessoas.push({nome, h});
     }
     
@@ -45,19 +48,19 @@ int main () {
     
     // Imprimindo
     timeAtual = 1;
-    printf("Time %d\n", timeAtual);
+    cout << "Time " << timeAtual << "\n";
     while (!times.empty()) {
         pair<string, int> a = times.top();
         times.pop();
         
         if (a.second != timeAtual) {
             timeAtual = a.second;
-            printf("\nTime %d\n", timeAtual);
+            cout << "\nTime " << timeAtual << "\n";
         }
         
-        printf("%s\n", a.first.c_str());
+        cout << a.first << "\n";
     }
-    printf("\n");
+    cout << "\n";
     
     return 0;
 }

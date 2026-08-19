@@ -3,12 +3,15 @@
 using namespace std;
 
 int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int x;
 
-    scanf("%d", &x);
+    cin >> x;
 
     for (int i = 1; i <= x; i++) {
-        if (i & 1) printf("%d\n", i);
+        if (i & 1) cout << i << "\n";
     }
 
     return 0;

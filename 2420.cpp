@@ -3,15 +3,18 @@
 using namespace std;
 
 int main () {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     vector<int> tamanhos;
     int n, num, k = 0;
     int area1, area2;
 
-    scanf("%d", &n);
+    cin >> n;
 
     // preenchendo o vetor
     for (int i = 0; i < n; i++) {
-        scanf("%d", &num);
+        cin >> num;
         if (i == 0) tamanhos.push_back(num);
         else {
             tamanhos.push_back(num + tamanhos[i - 1]);
@@ -29,7 +32,7 @@ int main () {
         }
     }
 
-    printf("%d\n", k);
+    cout << k << "\n";
 
     return 0;
 }
