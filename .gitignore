@@ -2,5 +2,4 @@
 .vscode
 cmake-build-debug
 *.exe
-CMakeLists.txt
 main.cpp
