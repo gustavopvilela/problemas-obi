@@ -296,128 +296,16 @@ problema exigir esse comportamento, existem duas saídas:
 
 - usar `stable_sort(inicio, fim, comparador)`, que garante a estabilidade;
 - ou acrescentar ao comparador um último desempate que torne a ordem única (por
-  exemplo, pelo índice original ou pelo nome), que é o que fazemos no problema
-  2693.
+  exemplo, pelo índice original ou pelo nome).
 
 A segunda opção é a preferida, porque deixa explícito no código qual é o
 critério real.
 
 ---
 
-## 6. Aplicação: o problema 2693 (*Van*)
-
-### O enunciado, em resumo
-
-Uma van vai entregar `Q` alunos em casa. Para cada aluno temos o **nome**, a
-**região** onde mora (uma letra: `L`, `N`, `O` ou `S`) e o **custo** até a casa
-dele. A rota deve entregar os alunos ordenados:
-
-1. pelo **custo**, do menor para o maior;
-2. em caso de empate, pela **região**, em ordem alfabética;
-3. em caso de empate ainda, pelo **nome**, em ordem alfabética.
-
-A saída é a lista dos nomes, um por linha, nessa ordem. E a entrada tem vários
-casos de teste, até o fim do arquivo (EOF).
-
-Ou seja: é exatamente o padrão de ordenação com dois níveis de desempate. A
-seguir comentamos as peças da solução, uma a uma.
-
-### 6.1 A `struct Aluno`
-
-```cpp
-struct Aluno {
-    string nome;
-    char regiao;
-    int custo;
-};
-```
-
-Cada aluno tem três informações que precisam **andar juntas**. Se guardássemos
-três vetores separados (`nomes`, `regioes`, `custos`) e ordenássemos um deles, os
-outros dois ficariam fora de lugar e o programa devolveria dados embaralhados.
-
-A `struct` resolve isso criando um tipo novo que empacota os três campos. Quando
-o `sort` troca dois `Aluno` de posição, ele leva o nome, a região e o custo
-juntos, sempre.
-
-Acessamos os campos com um ponto: `alunos[i].nome`, `alunos[i].custo`.
-
-### 6.2 A leitura até o fim do arquivo
-
-```cpp
-while (cin >> q) {
-```
-
-O enunciado diz que a entrada acaba em EOF, ou seja, não existe um valor
-especial marcando o fim, nem é informado quantos casos de teste virão. A leitura
-`cin >> q` devolve algo que vale `true` enquanto conseguiu ler um inteiro e
-`false` quando a entrada acabou. Colocá-la direto no `while` é a forma padrão de
-dizer "processe casos até a entrada terminar".
-
-Dentro do laço, `vector<Aluno> alunos(q);` cria um vetor novo com espaço para
-exatamente `q` alunos a cada caso de teste — não precisamos limpar nada, porque
-o vetor é recriado do zero.
-
-### 6.3 O comparador, critério por critério
-
-```cpp
-sort(alunos.begin(), alunos.end(), [](const Aluno &x, const Aluno &y) {
-    if (x.custo != y.custo) return x.custo < y.custo;
-    if (x.regiao != y.regiao) return x.regiao < y.regiao;
-    return x.nome < y.nome;
-});
-```
-
-Lendo como se fosse português:
-
-- **Linha 1** — "Os custos são diferentes? Então quem tem o menor custo vem
-  antes, e acabou a conversa."
-- **Linha 2** — "Chegamos aqui, então os custos são iguais. As regiões são
-  diferentes? Então a menor letra vem antes." Como `regiao` é um `char`, o
-  operador `<` compara pelo código ASCII; e, para letras maiúsculas, o código
-  ASCII cresce junto com a ordem alfabética (`L` < `N` < `O` < `S`). Por isso
-  comparar diretamente já dá a ordem alfabética pedida.
-- **Linha 3** — "Custo igual e região igual: decide o nome." A comparação de
-  `string` com `<` já é a ordem de dicionário.
-
-Note que os três critérios são exatamente a lista do enunciado, na mesma ordem.
-Traduzir o texto do problema para esse formato é boa parte do trabalho.
-
-### 6.4 Conferindo com o exemplo
-
-Entrada:
-
-```
-5
-Samuel O 1
-Fabricio L 1
-Emanuel S 3
-Kaio S 20
-Hugo N 90
-```
-
-- Samuel e Fabricio empatam no custo (`1`). O desempate vai para a região:
-  `L` (Fabricio) vem antes de `O` (Samuel). Logo, **Fabricio, depois Samuel**.
-- Emanuel (`3`), Kaio (`20`) e Hugo (`90`) têm custos distintos, então saem na
-  ordem crescente de custo, sem precisar de desempate.
-
-Saída:
-
-```
-Fabricio
-Samuel
-Emanuel
-Kaio
-Hugo
-```
-
-Que é exatamente a esperada.
-
----
-
 # Parte 2 — Dois Ponteiros
 
-## 7. O que é a técnica
+## 6. O que é a técnica
 
 **Dois ponteiros** é uma forma de percorrer uma sequência usando **duas
 variáveis de índice ao mesmo tempo**, em vez de uma só.
@@ -467,13 +355,13 @@ material andam juntos.
 
 ---
 
-## 8. As variantes
+## 7. As variantes
 
 "Dois ponteiros" é um nome guarda-chuva. Existem três formatos principais, e
 vale reconhecer os três, porque a diferença entre eles está em **para onde cada
 ponteiro anda**.
 
-### 8.1 Ponteiros que se aproximam (das pontas para o meio)
+### 7.1 Ponteiros que se aproximam (das pontas para o meio)
 
 Um índice começa no **início** do vetor e o outro no **fim**, e eles caminham um
 em direção ao outro até se encontrarem.
@@ -498,9 +386,9 @@ Serve para perguntas do tipo: *existe um par com soma `k`?*, *qual o par de soma
 mais próxima de `k`?*, *essa palavra é um palíndromo?*, *qual o maior volume de
 água que cabe entre duas paredes?*
 
-É a variante do problema 2422, e a que detalharemos na Seção 9.
+É a variante que detalharemos na Seção 8.
 
-### 8.2 Ponteiros no mesmo sentido (janela deslizante)
+### 7.2 Ponteiros no mesmo sentido (janela deslizante)
 
 Os dois índices começam no início e **ambos andam para a direita**. O `dir`
 avança **incluindo** elementos em um trecho; quando esse trecho deixa de
@@ -521,7 +409,7 @@ repetidos?*
 
 Repare que aqui também nenhum ponteiro volta: `esq` só cresce, `dir` só cresce.
 
-### 8.3 Um ponteiro em cada sequência
+### 7.3 Um ponteiro em cada sequência
 
 Quando há **dois vetores ordenados**, colocamos um índice em cada um e sempre
 avançamos aquele que aponta para o menor valor.
@@ -548,10 +436,9 @@ coisa.
 
 ---
 
-## 9. A variante das pontas para o meio, em detalhe
+## 8. A variante das pontas para o meio, em detalhe
 
-Vamos fechar o zoom na variante mais comum em prova, que é a usada no problema
-2422.
+Vamos fechar o zoom na variante mais comum em prova.
 
 **O cenário:** um vetor **ordenado** e a pergunta *existe um par de elementos
 cuja soma seja exatamente `k`?*
@@ -608,103 +495,7 @@ Seis passos, em vez dos 36 pares que os dois laços aninhados testariam.
 
 ---
 
-## 10. Aplicação: o problema 2422 (*Soma das Casas*)
-
-### O enunciado, em resumo
-
-Uma rua tem `N` casas, cada uma com um número. Dois brinquedos foram escondidos
-em duas casas **distintas**, e a dica é que a soma dos números dessas duas casas
-é `K`. O enunciado garante que **não existe outro par de casas com essa mesma
-soma**, ou seja, a resposta é única. Precisamos imprimir os dois números, o menor
-primeiro.
-
-Três informações do enunciado decidem a solução:
-
-1. A lista de casas já vem **em ordem crescente** — logo, não é preciso nem
-   chamar o `sort`. (Se não viesse, bastaria ordenar logo após a leitura; o resto
-   do algoritmo seria idêntico.)
-2. `N` pode chegar a 100.000 — o suficiente para a solução que testa todos os
-   pares estourar o tempo.
-3. As duas casas precisam ser **diferentes** uma da outra.
-
-Vetor ordenado + procurar um par com soma dada = a variante da Seção 9.
-
-### 10.1 A leitura
-
-Vale conferir a ordem da entrada: primeiro o número de casas, depois os `N`
-números das casas, e **só no fim** o valor `K`. É um erro comum ler o `K` antes
-da hora e receber *Wrong Answer* sem entender o motivo.
-
-### 10.2 A inicialização dos ponteiros
-
-```cpp
-int esq = 0, dir = n - 1;
-```
-
-`esq` aponta para a primeira casa (o menor número) e `dir` para a última (o
-maior). São só dois índices comuns do vetor.
-
-### 10.3 A condição do laço
-
-O laço roda **enquanto `esq < dir`**, e não `esq <= dir`. A diferença não é
-detalhe:
-
-- com `esq <= dir`, em algum momento os dois apontariam para a **mesma casa**, e
-  o programa poderia "achar" uma resposta somando uma casa com ela mesma — mas o
-  enunciado exige casas distintas;
-- além disso, `esq < dir` garante de graça que a saída sai **em ordem
-  crescente**, já que `esq` está sempre à esquerda de `dir` num vetor ordenado.
-
-Quando os dois ponteiros se encontram, todas as possibilidades já foram
-examinadas e o laço termina sozinho.
-
-### 10.4 O corpo do laço
-
-São exatamente os três casos da Seção 9, aplicados ao vetor de casas:
-
-- **soma igual a `K`** → é a resposta. Imprimimos as duas casas e saímos do laço
-  com `break`. Como o enunciado promete que o par é único, não há mais nada a
-  procurar — e sem o `break` o programa continuaria rodando à toa.
-- **soma maior que `K`** → `dir--`, para trocar o número da direita por um menor.
-- **soma menor que `K`** → `esq++`, para trocar o número da esquerda por um maior.
-
-Como em toda volta do laço exatamente um dos dois ponteiros anda uma casa, e
-nenhum deles volta, o programa faz no máximo `N` passos.
-
-### 10.5 Conferindo com os exemplos
-
-**Exemplo 1** — casas `1 2 3 5`, `K = 8`:
-
-| `esq` | `dir` | soma | ação |
-|---|---|---|---|
-| 0 | 3 | 1 + 5 = 6 | menor que 8 → `esq++` |
-| 1 | 3 | 2 + 5 = 7 | menor que 8 → `esq++` |
-| 2 | 3 | 3 + 5 = 8 | **igual** → imprime `3 5` |
-
-**Exemplo 2** — casas `1 2 3 5`, `K = 5`:
-
-| `esq` | `dir` | soma | ação |
-|---|---|---|---|
-| 0 | 3 | 1 + 5 = 6 | maior que 5 → `dir--` |
-| 0 | 2 | 1 + 3 = 4 | menor que 5 → `esq++` |
-| 1 | 2 | 2 + 3 = 5 | **igual** → imprime `2 3` |
-
-Os dois batem com a saída esperada do enunciado.
-
-### 10.6 Um cuidado sobre estouro de `int`
-
-O enunciado diz que cada número de casa pode chegar a 1.000.000.000 (um bilhão).
-A soma de duas casas pode então chegar a dois bilhões, e o limite de um `int` é
-aproximadamente 2,1 bilhões — ou seja, cabe, mas por pouco. Em um problema com
-valores um pouco maiores, essa soma estouraria silenciosamente, viraria um número
-negativo e daria resposta errada sem nenhum aviso.
-
-A regra prática: **se a soma de dois valores pode passar de mais ou menos 2
-bilhões, guarde-a em um `long long`**.
-
----
-
-## 11. Erros comuns
+## 9. Erros comuns
 
 **Em ordenação:**
 
